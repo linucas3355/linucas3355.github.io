@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>报价单</title>
+    <title>商品报价比较视图</title>
 
     <!-- 引入 DataTables 样式 -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
@@ -127,7 +127,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>报价单</h1>
+        <h1>商品报价比较视图</h1>
         <div class="table-container">
             <table id="data-table" class="display" style="width:100%">
                 <thead>
@@ -142,31 +142,37 @@
                         
                         <th>品牌或生产厂家</th>
                         
-                        <th>单位</th>
-                        
                         <th>需求数量</th>
                         
-                        <th>需求备注</th>
-                        
                         <th>项目公司</th>
-                        
-                        <th>联系电话</th>
-                        
-                        <th>联系人</th>
                         
                         <th>创建日期</th>
                         
                         <th>送货地址</th>
                         
-                        <th>供应商名称</th>
+                        <th>test1_交期(天)</th>
                         
-                        <th>交期（天）</th>
+                        <th>test1_单价(元)</th>
                         
-                        <th>单价（元）</th>
+                        <th>test1_金额(元)</th>
                         
-                        <th>金额（元）</th>
+                        <th>test1_报价备注</th>
                         
-                        <th>报价备注</th>
+                        <th>test2_交期(天)</th>
+                        
+                        <th>test2_单价(元)</th>
+                        
+                        <th>test2_金额(元)</th>
+                        
+                        <th>test2_报价备注</th>
+                        
+                        <th>推荐供应商</th>
+                        
+                        <th>推荐金额</th>
+                        
+                        <th>推荐交期</th>
+                        
+                        <th>推荐备注</th>
                         
                     </tr>
                     <tr>
@@ -180,31 +186,37 @@
                         
                         <th><input type="text" class="column-filter" placeholder="筛选 品牌或生产厂家"></th>
                         
-                        <th><input type="text" class="column-filter" placeholder="筛选 单位"></th>
-                        
                         <th><input type="text" class="column-filter" placeholder="筛选 需求数量"></th>
                         
-                        <th><input type="text" class="column-filter" placeholder="筛选 需求备注"></th>
-                        
                         <th><input type="text" class="column-filter" placeholder="筛选 项目公司"></th>
-                        
-                        <th><input type="text" class="column-filter" placeholder="筛选 联系电话"></th>
-                        
-                        <th><input type="text" class="column-filter" placeholder="筛选 联系人"></th>
                         
                         <th><input type="text" class="column-filter" placeholder="筛选 创建日期"></th>
                         
                         <th><input type="text" class="column-filter" placeholder="筛选 送货地址"></th>
                         
-                        <th><input type="text" class="column-filter" placeholder="筛选 供应商名称"></th>
+                        <th><input type="text" class="column-filter" placeholder="筛选 test1_交期(天)"></th>
                         
-                        <th><input type="text" class="column-filter" placeholder="筛选 交期（天）"></th>
+                        <th><input type="text" class="column-filter" placeholder="筛选 test1_单价(元)"></th>
                         
-                        <th><input type="text" class="column-filter" placeholder="筛选 单价（元）"></th>
+                        <th><input type="text" class="column-filter" placeholder="筛选 test1_金额(元)"></th>
                         
-                        <th><input type="text" class="column-filter" placeholder="筛选 金额（元）"></th>
+                        <th><input type="text" class="column-filter" placeholder="筛选 test1_报价备注"></th>
                         
-                        <th><input type="text" class="column-filter" placeholder="筛选 报价备注"></th>
+                        <th><input type="text" class="column-filter" placeholder="筛选 test2_交期(天)"></th>
+                        
+                        <th><input type="text" class="column-filter" placeholder="筛选 test2_单价(元)"></th>
+                        
+                        <th><input type="text" class="column-filter" placeholder="筛选 test2_金额(元)"></th>
+                        
+                        <th><input type="text" class="column-filter" placeholder="筛选 test2_报价备注"></th>
+                        
+                        <th><input type="text" class="column-filter" placeholder="筛选 推荐供应商"></th>
+                        
+                        <th><input type="text" class="column-filter" placeholder="筛选 推荐金额"></th>
+                        
+                        <th><input type="text" class="column-filter" placeholder="筛选 推荐交期"></th>
+                        
+                        <th><input type="text" class="column-filter" placeholder="筛选 推荐备注"></th>
                         
                     </tr>
                 </thead>
@@ -229,60 +241,27 @@
                         
                         <td title="nan">nan</td>
                         
-                        <td title="nan">nan</td>
+                        <td title="5">5</td>
+                        
+                        <td title="10">10</td>
+                        
+                        <td title="10">10</td>
                         
                         <td title="nan">nan</td>
                         
-                        <td title="nan">nan</td>
+                        <td title="5">5</td>
+                        
+                        <td title="15">15</td>
+                        
+                        <td title="15">15</td>
                         
                         <td title="nan">nan</td>
                         
                         <td title="test1">test1</td>
                         
-                        <td title="5">5</td>
-                        
                         <td title="10">10</td>
                         
-                        <td title="10">10</td>
-                        
-                        <td title="nan">nan</td>
-                        
-                    </tr>
-                    
-                    <tr>
-                        <td><input type="checkbox" class="row-checkbox"></td> <!-- 每行复选框 -->
-                        
-                        <td title="1">1</td>
-                        
-                        <td title="100">100</td>
-                        
-                        <td title="a">a</td>
-                        
-                        <td title="nan">nan</td>
-                        
-                        <td title="nan">nan</td>
-                        
-                        <td title="nan">nan</td>
-                        
-                        <td title="nan">nan</td>
-                        
-                        <td title="nan">nan</td>
-                        
-                        <td title="nan">nan</td>
-                        
-                        <td title="nan">nan</td>
-                        
-                        <td title="nan">nan</td>
-                        
-                        <td title="nan">nan</td>
-                        
-                        <td title="test2">test2</td>
-                        
                         <td title="5">5</td>
-                        
-                        <td title="15">15</td>
-                        
-                        <td title="15">15</td>
                         
                         <td title="nan">nan</td>
                         
@@ -338,7 +317,7 @@
                             const link = document.createElement('a');
                             const url = URL.createObjectURL(csvBlob);
                             link.setAttribute('href', url);
-                            link.setAttribute('download', '报价单_选中行数据.csv');
+                            link.setAttribute('download', '商品报价比较视图_选中行数据.csv');
                             document.body.appendChild(link);
                             link.click();
                             document.body.removeChild(link);
