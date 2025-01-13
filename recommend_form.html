@@ -313,6 +313,7 @@
                         $.ajax({
                             url: excelTemplateUrl,  // 你的模板 URL
                             method: 'GET',
+                            xhrFields: { responseType: 'arraybuffer' },
                             success: function (data) {
                                 var wb = XLSX.read(data, { type: 'binary' });
 
@@ -347,8 +348,17 @@
                         });
                     }
                 }
-
                     },
+
+                {
+                    text: '导出全部数据 (Excel)',
+                    className: 'btn btn-success',
+                    action: function () {
+                     // 调用自定义导出逻辑
+                    exportAllRows();
+                    }
+                },
+
                     {
                         extend: 'excelHtml5', // 使用 DataTables 内置的 Excel 导出功能
                         text: '导出全部数据 (Excel)',
