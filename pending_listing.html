@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -167,18 +167,21 @@
     <script src="https://cdn.datatables.net/colreorder/1.6.2/js/dataTables.colReorder.min.js"></script>
 
     <script>
+
+	var excelTemplateUrl = "None";
+
         $(document).ready(function () {
             // 初始化 DataTables
             let table = $('#data-table').DataTable({
                 dom: '<"d-flex justify-content-between"Bf>tip',  // 布局调整：按钮和搜索框在一行
-                columnDefs: [
-                    {
-                        targets: [2], 
-                        render: function (data, type, row) {
-                            return data ? data.toString().replace(/\.0+$/,'')  :  '';
-                        }
-                    }
-                ],
+		columnDefs: [
+			{
+				targets: [2], 
+				render: function (data, type, row) {
+					return data ? data.toString().replace(/\.0+$/,'')  :  '';
+				}
+			}
+		],
                 buttons: [
                     {
                         extend: 'excelHtml5', // 使用 DataTables 内置的 Excel 导出功能
@@ -190,7 +193,51 @@
                             rows: function (idx, data, node) {
                                 return $('.row-checkbox').eq(idx).prop('checked'); // 仅导出选中行
                             }
-                        }
+                        }		
+			
+		// Excel 导出时应用自定义模板
+                customize: function (xlsx) {
+                    // 如果是 "询价单" 页面，则使用自定义 Excel 模板
+                    if (window.location.pathname.includes("inquiry_form.html")) {
+                        // 通过 Ajax 请求获取模板
+                        $.ajax({
+                            url: excelTemplateUrl,  // 你的模板 URL
+                            method: 'GET',
+                            success: function (data) {
+                                var wb = XLSX.read(data, { type: 'binary' });
+
+                                // 获取模板中的第一个工作表
+                                var sheet = wb.Sheets[wb.SheetNames[0]];
+
+                                // 获取模板中的前五行（假设这些行是固定的，不变）
+                                var fixedRows = XLSX.utils.sheet_to_json(sheet, { header: 1 }).slice(0, 5);
+
+                                // 获取从第六行开始的数据
+                                var rowData = table.rows({ selected: true }).data().toArray();  // 获取选中的数据
+
+                                // 将模板前五行与数据合并
+                                var mergedData = fixedRows.concat(rowData);
+
+                                // 创建新的工作表（合并前五行和数据）
+                                var newSheet = XLSX.utils.aoa_to_sheet(mergedData);
+
+                                // 将新数据合并进模板
+                                wb.Sheets[wb.SheetNames[0]] = newSheet;
+                                var newExcelData = XLSX.write(wb, { bookType: 'xlsx', type: 'base64' });
+
+                                // 将修改后的数据进行导出
+                                var link = document.createElement('a');
+                                link.href = 'data:application/octet-stream;base64,' + newExcelData;
+                                link.download = '待上架信息表_导出模板.xlsx';
+                                link.click();
+                            },
+                            error: function (err) {
+                                console.log('获取模板失败', err);
+                            }
+                        });
+                    }
+                }
+
                     },
                     {
                         extend: 'excelHtml5', // 使用 DataTables 内置的 Excel 导出功能
@@ -199,50 +246,6 @@
                         filename: '待上架信息表_全部数据',
                         exportOptions: {
                             columns: ':visible' // 导出所有可见列
-                        }
-                    },
-                    {
-                        extend: 'excelHtml5', // 使用模板导出
-                        text: '导出（模板）',
-                        className: 'btn btn-info',
-                        filename: '待上架信息表_模板导出',
-                        action: function (e, dt, button, config) {
-                            const templateUrl = 'https://yourusername.github.io/your-repository/static/templates/inquiry_template.xlsx';
-
-                            fetch(templateUrl)
-                                .then(response => response.arrayBuffer())
-                                .then(buffer => {
-                                    let workbook = XLSX.read(buffer, { type: 'array' });
-                                    let sheet = workbook.Sheets[
-				    fetch(templateUrl)
-                              		  .then(response => response.arrayBuffer())
-                        		  .then(buffer => {
-                               		  	let workbook = XLSX.read(buffer, { type: 'array' });
-                                 		let sheet = workbook.Sheets[workbook.SheetNames[0]];
-
-                                    // 从数据库或其他地方获取动态数据，假设数据保存在 `rows` 变量中
-                                    let data = []; // 使用模板引擎传递的 rows 数据
-
-                                    // 从第六行开始填充数据
-                                    data.forEach((rowData, index) => {
-                                        let rowIndex = 6 + index;  // 第六行开始
-                                        // 你可以根据数据的列数和顺序调整以下代码
-                                        sheet['A' + rowIndex] = { v: rowData[0] };
-                                        sheet['B' + rowIndex] = { v: rowData[1] };
-                                        sheet['C' + rowIndex] = { v: rowData[2] };
-                                        sheet['D' + rowIndex] = { v: rowData[3] };
-                                        // 根据需要增加更多列的填充
-                                    });
-
-                                    // 保存为新的 Excel 文件并下载
-                                    let wbout = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-                                    let blob = new Blob([wbout], { type: 'application/octet-stream' });
-                                    let link = document.createElement('a');
-                                    link.href = URL.createObjectURL(blob);
-                                    link.download = '待上架信息表_模板导出.xlsx';
-                                    link.click();
-                                })
-                                .catch(error => console.error('Error fetching the template:', error));
                         }
                     }
                 ],
