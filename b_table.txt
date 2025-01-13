@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>商品报价比较视图</title>
+    <title>每日B表新增</title>
 
     <!-- 引入 DataTables 样式 -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
@@ -127,7 +127,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>商品报价比较视图</h1>
+        <h1>每日B表新增</h1>
         <div class="table-container">
             <table id="data-table" class="display" style="width:100%">
                 <thead>
@@ -138,41 +138,31 @@
                         
                         <th>物料编码</th>
                         
-                        <th>产品名称</th>
+                        <th>物料名称</th>
                         
-                        <th>品牌或生产厂家</th>
+                        <th>公式</th>
+                        
+                        <th>品牌（选填）</th>
+                        
+                        <th>单位</th>
                         
                         <th>需求数量</th>
                         
-                        <th>项目公司</th>
+                        <th>预算（单价）</th>
+                        
+                        <th>计划到货日期</th>
+                        
+                        <th>备注</th>
+                        
+                        <th>公司名称</th>
+                        
+                        <th>联系电话</th>
+                        
+                        <th>创建人</th>
                         
                         <th>创建日期</th>
                         
-                        <th>送货地址</th>
-                        
-                        <th>test1_交期(天)</th>
-                        
-                        <th>test1_单价(元)</th>
-                        
-                        <th>test1_金额(元)</th>
-                        
-                        <th>test1_报价备注</th>
-                        
-                        <th>test2_交期(天)</th>
-                        
-                        <th>test2_单价(元)</th>
-                        
-                        <th>test2_金额(元)</th>
-                        
-                        <th>test2_报价备注</th>
-                        
                         <th>推荐供应商</th>
-                        
-                        <th>推荐金额</th>
-                        
-                        <th>推荐交期</th>
-                        
-                        <th>推荐备注</th>
                         
                     </tr>
                     <tr>
@@ -182,41 +172,31 @@
                         
                         <th><input type="text" class="column-filter" placeholder="筛选 物料编码"></th>
                         
-                        <th><input type="text" class="column-filter" placeholder="筛选 产品名称"></th>
+                        <th><input type="text" class="column-filter" placeholder="筛选 物料名称"></th>
                         
-                        <th><input type="text" class="column-filter" placeholder="筛选 品牌或生产厂家"></th>
+                        <th><input type="text" class="column-filter" placeholder="筛选 公式"></th>
+                        
+                        <th><input type="text" class="column-filter" placeholder="筛选 品牌（选填）"></th>
+                        
+                        <th><input type="text" class="column-filter" placeholder="筛选 单位"></th>
                         
                         <th><input type="text" class="column-filter" placeholder="筛选 需求数量"></th>
                         
-                        <th><input type="text" class="column-filter" placeholder="筛选 项目公司"></th>
+                        <th><input type="text" class="column-filter" placeholder="筛选 预算（单价）"></th>
+                        
+                        <th><input type="text" class="column-filter" placeholder="筛选 计划到货日期"></th>
+                        
+                        <th><input type="text" class="column-filter" placeholder="筛选 备注"></th>
+                        
+                        <th><input type="text" class="column-filter" placeholder="筛选 公司名称"></th>
+                        
+                        <th><input type="text" class="column-filter" placeholder="筛选 联系电话"></th>
+                        
+                        <th><input type="text" class="column-filter" placeholder="筛选 创建人"></th>
                         
                         <th><input type="text" class="column-filter" placeholder="筛选 创建日期"></th>
                         
-                        <th><input type="text" class="column-filter" placeholder="筛选 送货地址"></th>
-                        
-                        <th><input type="text" class="column-filter" placeholder="筛选 test1_交期(天)"></th>
-                        
-                        <th><input type="text" class="column-filter" placeholder="筛选 test1_单价(元)"></th>
-                        
-                        <th><input type="text" class="column-filter" placeholder="筛选 test1_金额(元)"></th>
-                        
-                        <th><input type="text" class="column-filter" placeholder="筛选 test1_报价备注"></th>
-                        
-                        <th><input type="text" class="column-filter" placeholder="筛选 test2_交期(天)"></th>
-                        
-                        <th><input type="text" class="column-filter" placeholder="筛选 test2_单价(元)"></th>
-                        
-                        <th><input type="text" class="column-filter" placeholder="筛选 test2_金额(元)"></th>
-                        
-                        <th><input type="text" class="column-filter" placeholder="筛选 test2_报价备注"></th>
-                        
                         <th><input type="text" class="column-filter" placeholder="筛选 推荐供应商"></th>
-                        
-                        <th><input type="text" class="column-filter" placeholder="筛选 推荐金额"></th>
-                        
-                        <th><input type="text" class="column-filter" placeholder="筛选 推荐交期"></th>
-                        
-                        <th><input type="text" class="column-filter" placeholder="筛选 推荐备注"></th>
                         
                     </tr>
                 </thead>
@@ -225,11 +205,52 @@
                     <tr>
                         <td><input type="checkbox" class="row-checkbox"></td> <!-- 每行复选框 -->
                         
-                        <td title="1">1</td>
+                        <td title="20250109001">20250109001</td>
                         
-                        <td title="100">100</td>
+                        <td title="1000403003.0">1000403003.0</td>
                         
-                        <td title="a">a</td>
+                        <td title="纽扣电池\CR2032">纽扣电池\CR2032</td>
+                        
+                        <td title="nan">nan</td>
+                        
+                        <td title="nan">nan</td>
+                        
+                        <td title="个">个</td>
+                        
+                        <td title="10.0">10.0</td>
+                        
+                        <td title="nan">nan</td>
+                        
+                        <td title="nan">nan</td>
+                        
+                        <td title="仪表使用 田智伟">仪表使用 田智伟</td>
+                        
+                        <td title="内蒙古鑫元硅材料科技有限公司">内蒙古鑫元硅材料科技有限公司</td>
+                        
+                        <td title="nan">nan</td>
+                        
+                        <td title="苏恩光">苏恩光</td>
+                        
+                        <td title="2025/1/9">2025/1/9</td>
+                        
+                        <td title="nan">nan</td>
+                        
+                    </tr>
+                    
+                    <tr>
+                        <td><input type="checkbox" class="row-checkbox"></td> <!-- 每行复选框 -->
+                        
+                        <td title="20250109002">20250109002</td>
+                        
+                        <td title="nan">nan</td>
+                        
+                        <td title="None">None</td>
+                        
+                        <td title="nan">nan</td>
+                        
+                        <td title="nan">nan</td>
+                        
+                        <td title="None">None</td>
                         
                         <td title="nan">nan</td>
                         
@@ -237,31 +258,85 @@
                         
                         <td title="nan">nan</td>
                         
+                        <td title="None">None</td>
+                        
+                        <td title="None">None</td>
+                        
+                        <td title="nan">nan</td>
+                        
+                        <td title="穆佳玲">穆佳玲</td>
+                        
+                        <td title="2025/1/9">2025/1/9</td>
+                        
+                        <td title="nan">nan</td>
+                        
+                    </tr>
+                    
+                    <tr>
+                        <td><input type="checkbox" class="row-checkbox"></td> <!-- 每行复选框 -->
+                        
+                        <td title="20250109003">20250109003</td>
+                        
+                        <td title="nan">nan</td>
+                        
+                        <td title="None">None</td>
+                        
                         <td title="nan">nan</td>
                         
                         <td title="nan">nan</td>
                         
-                        <td title="5">5</td>
-                        
-                        <td title="10">10</td>
-                        
-                        <td title="10">10</td>
+                        <td title="None">None</td>
                         
                         <td title="nan">nan</td>
                         
-                        <td title="5">5</td>
-                        
-                        <td title="15">15</td>
-                        
-                        <td title="15">15</td>
+                        <td title="nan">nan</td>
                         
                         <td title="nan">nan</td>
                         
-                        <td title="test1">test1</td>
+                        <td title="None">None</td>
                         
-                        <td title="10">10</td>
+                        <td title="None">None</td>
                         
-                        <td title="5">5</td>
+                        <td title="nan">nan</td>
+                        
+                        <td title="姚瑞娟">姚瑞娟</td>
+                        
+                        <td title="2025/1/9">2025/1/9</td>
+                        
+                        <td title="nan">nan</td>
+                        
+                    </tr>
+                    
+                    <tr>
+                        <td><input type="checkbox" class="row-checkbox"></td> <!-- 每行复选框 -->
+                        
+                        <td title="20250109004">20250109004</td>
+                        
+                        <td title="nan">nan</td>
+                        
+                        <td title="None">None</td>
+                        
+                        <td title="nan">nan</td>
+                        
+                        <td title="nan">nan</td>
+                        
+                        <td title="None">None</td>
+                        
+                        <td title="nan">nan</td>
+                        
+                        <td title="nan">nan</td>
+                        
+                        <td title="nan">nan</td>
+                        
+                        <td title="None">None</td>
+                        
+                        <td title="None">None</td>
+                        
+                        <td title="nan">nan</td>
+                        
+                        <td title="Andy.Z">Andy.Z</td>
+                        
+                        <td title="2025/1/9">2025/1/9</td>
                         
                         <td title="nan">nan</td>
                         
@@ -298,7 +373,7 @@
                 dom: '<"d-flex justify-content-between"Bf>tip',  // 布局调整：按钮和搜索框在一行
 		columnDefs: [
 			{
-				targets: [2], 
+				targets: [0], 
 				render: function (data, type, row) {
 					return data ? data.toString().replace(/\.0+$/,'')  :  '';
 				}
@@ -309,7 +384,7 @@
                         extend: 'excelHtml5', // 使用 DataTables 内置的 Excel 导出功能
                         text: '导出选中行 (Excel)',
                         className: 'btn btn-primary',
-                        filename: '商品报价比较视图_选中行数据',
+                        filename: '每日B表新增_选中行数据',
                         exportOptions: {
                             columns: ':visible', // 只导出可见列
                             rows: function (idx, data, node) {
@@ -321,7 +396,7 @@
                         extend: 'excelHtml5', // 使用 DataTables 内置的 Excel 导出功能
                         text: '导出全部数据 (Excel)',
                         className: 'btn btn-success',
-                        filename: '商品报价比较视图_全部数据',
+                        filename: '每日B表新增_全部数据',
                         exportOptions: {
                             columns: ':visible' // 导出所有可见列
                         }

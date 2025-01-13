@@ -171,37 +171,32 @@
             // 初始化 DataTables
             let table = $('#data-table').DataTable({
                 dom: '<"d-flex justify-content-between"Bf>tip',  // 布局调整：按钮和搜索框在一行
+		columnDefs: [
+			{
+				targets: [2], 
+				render: function (data, type, row) {
+					return data ? data.toString().replace(/\.0+$/,'')  :  '';
+				}
+			}
+		],
                 buttons: [
                     {
-                        text: '导出选中行',
+                        extend: 'excelHtml5', // 使用 DataTables 内置的 Excel 导出功能
+                        text: '导出选中行 (Excel)',
                         className: 'btn btn-primary',
-                        action: function () {
-                            const selectedRows = [];
-                            $('.row-checkbox:checked').each(function () {
-                                const rowData = table.row($(this).closest('tr')).data();
-                                selectedRows.push(rowData);
-                            });
-
-                            if (selectedRows.length === 0) {
-                                alert('请选择至少一行数据进行导出！');
-                                return;
+                        filename: '待上架信息表_选中行数据',
+                        exportOptions: {
+                            columns: ':visible', // 只导出可见列
+                            rows: function (idx, data, node) {
+                                return $('.row-checkbox').eq(idx).prop('checked'); // 仅导出选中行
                             }
-
-                            const csvData = selectedRows.map(row => row.join(",")).join("\n");
-                            const csvBlob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
-                            const link = document.createElement('a');
-                            const url = URL.createObjectURL(csvBlob);
-                            link.setAttribute('href', url);
-                            link.setAttribute('download', '待上架信息表_选中行数据.csv');
-                            document.body.appendChild(link);
-                            link.click();
-                            document.body.removeChild(link);
                         }
                     },
                     {
-                        extend: 'excelHtml5',
-                        text: '导出全部数据',
+                        extend: 'excelHtml5', // 使用 DataTables 内置的 Excel 导出功能
+                        text: '导出全部数据 (Excel)',
                         className: 'btn btn-success',
+                        filename: '待上架信息表_全部数据',
                         exportOptions: {
                             columns: ':visible' // 导出所有可见列
                         }
@@ -226,6 +221,12 @@
                 }
             });
 
+            // 全选复选框功能
+            $('#select-all').on('click', function () {
+                const isChecked = $(this).prop('checked');
+                $('.row-checkbox').prop('checked', isChecked);
+            });
+
             // 添加筛选功能
             $('#data-table thead tr:eq(1) th').each(function (i) {
                 $('input', this).on('keyup change', function () {
@@ -233,12 +234,6 @@
                         table.column(i).search(this.value).draw();
                     }
                 });
-            });
-
-            // 全选复选框功能
-            $('#select-all').on('click', function () {
-                const isChecked = $(this).prop('checked');
-                $('.row-checkbox').prop('checked', isChecked);
             });
         });
     </script>
