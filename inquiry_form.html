@@ -134,114 +134,13 @@
                     <tr>
                         <th><input type="checkbox" id="select-all"></th> <!-- 全选复选框 -->
                         
-                        <th>序号</th>
-                        
-                        <th>物料编码</th>
-                        
-                        <th>产品名称</th>
-                        
-                        <th>品牌或生产厂家</th>
-                        
-                        <th>单位</th>
-                        
-                        <th>需求数量</th>
-                        
-                        <th>需求备注</th>
-                        
-                        <th>项目公司</th>
-                        
-                        <th>联系电话</th>
-                        
-                        <th>联系人</th>
-                        
-                        <th>创建日期</th>
-                        
-                        <th>送货地址</th>
-                        
-                        <th>交期（天）</th>
-                        
-                        <th>单价（元）</th>
-                        
-                        <th>金额（元）</th>
-                        
-                        <th>报价备注</th>
-                        
                     </tr>
                     <tr>
                         <th></th> <!-- 预留复选框列 -->
                         
-                        <th><input type="text" class="column-filter" placeholder="筛选 序号"></th>
-                        
-                        <th><input type="text" class="column-filter" placeholder="筛选 物料编码"></th>
-                        
-                        <th><input type="text" class="column-filter" placeholder="筛选 产品名称"></th>
-                        
-                        <th><input type="text" class="column-filter" placeholder="筛选 品牌或生产厂家"></th>
-                        
-                        <th><input type="text" class="column-filter" placeholder="筛选 单位"></th>
-                        
-                        <th><input type="text" class="column-filter" placeholder="筛选 需求数量"></th>
-                        
-                        <th><input type="text" class="column-filter" placeholder="筛选 需求备注"></th>
-                        
-                        <th><input type="text" class="column-filter" placeholder="筛选 项目公司"></th>
-                        
-                        <th><input type="text" class="column-filter" placeholder="筛选 联系电话"></th>
-                        
-                        <th><input type="text" class="column-filter" placeholder="筛选 联系人"></th>
-                        
-                        <th><input type="text" class="column-filter" placeholder="筛选 创建日期"></th>
-                        
-                        <th><input type="text" class="column-filter" placeholder="筛选 送货地址"></th>
-                        
-                        <th><input type="text" class="column-filter" placeholder="筛选 交期（天）"></th>
-                        
-                        <th><input type="text" class="column-filter" placeholder="筛选 单价（元）"></th>
-                        
-                        <th><input type="text" class="column-filter" placeholder="筛选 金额（元）"></th>
-                        
-                        <th><input type="text" class="column-filter" placeholder="筛选 报价备注"></th>
-                        
                     </tr>
                 </thead>
                 <tbody>
-                    
-                    <tr>
-                        <td><input type="checkbox" class="row-checkbox"></td> <!-- 每行复选框 -->
-                        
-                        <td title="20250109001">20250109001</td>
-                        
-                        <td title="1000403003">1000403003</td>
-                        
-                        <td title="纽扣电池\CR2032">纽扣电池\CR2032</td>
-                        
-                        <td title="nan">nan</td>
-                        
-                        <td title="个">个</td>
-                        
-                        <td title="10">10</td>
-                        
-                        <td title="仪表使用 田智伟">仪表使用 田智伟</td>
-                        
-                        <td title="内蒙古鑫元硅材料科技有限公司">内蒙古鑫元硅材料科技有限公司</td>
-                        
-                        <td title="nan">nan</td>
-                        
-                        <td title="苏恩光">苏恩光</td>
-                        
-                        <td title="2025/1/9">2025/1/9</td>
-                        
-                        <td title="nan">nan</td>
-                        
-                        <td title="nan">nan</td>
-                        
-                        <td title="nan">nan</td>
-                        
-                        <td title="nan">nan</td>
-                        
-                        <td title="nan">nan</td>
-                        
-                    </tr>
                     
                 </tbody>
             </table>
@@ -272,14 +171,14 @@
             // 初始化 DataTables
             let table = $('#data-table').DataTable({
                 dom: '<"d-flex justify-content-between"Bf>tip',  // 布局调整：按钮和搜索框在一行
-		columnDefs: [
-			{
-				targets: [2], 
-				render: function (data, type, row) {
-					return data ? data.toString().replace(/\.0+$/,'')  :  '';
-				}
-			}
-		],
+                columnDefs: [
+                    {
+                        targets: [2], 
+                        render: function (data, type, row) {
+                            return data ? data.toString().replace(/\.0+$/,'')  :  '';
+                        }
+                    }
+                ],
                 buttons: [
                     {
                         extend: 'excelHtml5', // 使用 DataTables 内置的 Excel 导出功能
@@ -300,6 +199,50 @@
                         filename: '询价单_全部数据',
                         exportOptions: {
                             columns: ':visible' // 导出所有可见列
+                        }
+                    },
+                    {
+                        extend: 'excelHtml5', // 使用模板导出
+                        text: '导出（模板）',
+                        className: 'btn btn-info',
+                        filename: '询价单_模板导出',
+                        action: function (e, dt, button, config) {
+                            const templateUrl = 'https://yourusername.github.io/your-repository/static/templates/inquiry_template.xlsx';
+
+                            fetch(templateUrl)
+                                .then(response => response.arrayBuffer())
+                                .then(buffer => {
+                                    let workbook = XLSX.read(buffer, { type: 'array' });
+                                    let sheet = workbook.Sheets[
+				    fetch(templateUrl)
+                              		  .then(response => response.arrayBuffer())
+                        		  .then(buffer => {
+                               		  	let workbook = XLSX.read(buffer, { type: 'array' });
+                                 		let sheet = workbook.Sheets[workbook.SheetNames[0]];
+
+                                    // 从数据库或其他地方获取动态数据，假设数据保存在 `rows` 变量中
+                                    let data = []; // 使用模板引擎传递的 rows 数据
+
+                                    // 从第六行开始填充数据
+                                    data.forEach((rowData, index) => {
+                                        let rowIndex = 6 + index;  // 第六行开始
+                                        // 你可以根据数据的列数和顺序调整以下代码
+                                        sheet['A' + rowIndex] = { v: rowData[0] };
+                                        sheet['B' + rowIndex] = { v: rowData[1] };
+                                        sheet['C' + rowIndex] = { v: rowData[2] };
+                                        sheet['D' + rowIndex] = { v: rowData[3] };
+                                        // 根据需要增加更多列的填充
+                                    });
+
+                                    // 保存为新的 Excel 文件并下载
+                                    let wbout = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+                                    let blob = new Blob([wbout], { type: 'application/octet-stream' });
+                                    let link = document.createElement('a');
+                                    link.href = URL.createObjectURL(blob);
+                                    link.download = '询价单_模板导出.xlsx';
+                                    link.click();
+                                })
+                                .catch(error => console.error('Error fetching the template:', error));
                         }
                     }
                 ],
