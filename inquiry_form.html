@@ -311,32 +311,39 @@
                             method: 'GET',
                             xhrFields: { responseType: 'arraybuffer' },
                             success: function (data) {
-                                var wb = XLSX.read(data, { type: 'binary' });
+                                try {
+                                    // 使用 XLSX 解析模板数据
+                                    let workbook = XLSX.read(data, { type: 'array' });
+                                    let sheet = workbook.Sheets[workbook.SheetNames[0]];
 
-                                // 获取模板中的第一个工作表
-                                var sheet = wb.Sheets[wb.SheetNames[0]];
+                                    // 获取模板的前五行
+                                    let fixedRows = XLSX.utils.sheet_to_json(sheet, { header: 1 }).slice(0, 5);
 
-                                // 获取模板中的前五行（假设这些行是固定的，不变）
-                                var fixedRows = XLSX.utils.sheet_to_json(sheet, { header: 1 }).slice(0, 5);
+                                    // 获取选中行的数据
+                                    let rowData = table.rows({ selected: true }).data().toArray();
+                                    if (rowData.length === 0) {
+                                        rowData = table.rows().data().toArray(); // 如果未选中任何行，则导出全部数据
+                                    }
 
-                                // 获取从第六行开始的数据
-                                var rowData = table.rows({ selected: true }).data().toArray();  // 获取选中的数据
+                                    // 将选中数据转换为二维数组
+                                    let dataArray = rowData.map(row => Object.values(row));
 
-                                // 将模板前五行与数据合并
-                                var mergedData = fixedRows.concat(rowData);
+                                    // 合并模板前五行和选中行数据
+                                    let mergedData = fixedRows.concat(dataArray);
 
-                                // 创建新的工作表（合并前五行和数据）
-                                var newSheet = XLSX.utils.aoa_to_sheet(mergedData);
+                                    // 创建新的工作表
+                                    let newSheet = XLSX.utils.aoa_to_sheet(mergedData);
 
-                                // 将新数据合并进模板
-                                wb.Sheets[wb.SheetNames[0]] = newSheet;
-                                var newExcelData = XLSX.write(wb, { bookType: 'xlsx', type: 'base64' });
+                                    // 替换模板中的工作表
+                                    workbook.Sheets[workbook.SheetNames[0]] = newSheet;
 
-                                // 将修改后的数据进行导出
-                                var link = document.createElement('a');
-                                link.href = 'data:application/octet-stream;base64,' + newExcelData;
-                                link.download = '询价单_导出模板.xlsx';
-                                link.click();
+                                    // 导出文件
+                                    let wbout = XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });
+                                    let blob = new Blob([s2ab(wbout)], { type: "application/octet-stream" });
+                                    saveAs(blob, "询价单_导出模板.xlsx");
+                                } catch (error) {
+                                    console.error("模板处理失败:", error);
+                                }
                             },
                             error: function (err) {
                                 console.log('获取模板失败', err);
