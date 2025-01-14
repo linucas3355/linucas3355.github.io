@@ -171,6 +171,17 @@
 
     <script>
 
+    // 字符串转为二进制数据
+    function s2ab(s) {
+        var buf = new ArrayBuffer(s.length); // 创建长度为 s.length 的缓冲区
+        var view = new Uint8Array(buf); // 创建视图以操作缓冲区
+        for (var i = 0; i < s.length; i++) {
+          view[i] = s.charCodeAt(i) & 0xFF; // 将字符串转换为二进制数据
+        }
+        return buf;
+    }
+
+
 	var excelTemplateUrl = "None";
 
         $(document).ready(function () {
