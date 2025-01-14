@@ -9,6 +9,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
+    <!--引入 ExcelJS-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
     <!-- 引入 DataTables 样式 -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
@@ -332,18 +335,18 @@
 
 	var excelTemplateUrl = "None";
 
-        $(document).ready(function () {
-            // 初始化 DataTables
-            let table = $('#data-table').DataTable({
-                dom: '<"d-flex justify-content-between"Bf>tip',  // 布局调整：按钮和搜索框在一行
-		columnDefs: [
+    $(document).ready(function () {
+        // 初始化 DataTables
+        let table = $('#data-table').DataTable({
+            dom: '<"d-flex justify-content-between"Bf>tip',  // 布局调整：按钮和搜索框在一行
+		    columnDefs: [
 			{
 				targets: [2], 
 				render: function (data, type, row) {
 					return data ? data.toString().replace(/\.0+$/,'')  :  '';
 				}
 			}
-		],
+		    ],
                 buttons: [
                     {
                         extend: 'excelHtml5', // 使用 DataTables 内置的 Excel 导出功能
@@ -357,7 +360,7 @@
                             }
                         },		
 			
-		// Excel 导出时应用自定义模板
+		        // Excel 导出时应用自定义模板
                 customize: function (xlsx) {
                     // 如果是 "询价单" 页面，则使用自定义 Excel 模板
                     if (window.location.pathname.includes("inquiry_form.html")) {
@@ -382,7 +385,7 @@
                                     }
 
                                     // 将选中数据转换为二维数组
-                                    let dataArray = rowData.map(row => Object.values(row));
+                                    let dataArray = rowData.map(row => row.slice(1));
 
                                     // 合并模板前五行和选中行数据
                                     let mergedData = fixedRows.concat(dataArray);
