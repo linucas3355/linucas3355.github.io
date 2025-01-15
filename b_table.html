@@ -240,7 +240,11 @@
                         }
 
                         // 添加表头（列名）
-                        let headers = table.columns(':visible').header().toArray().map(header => $(header).text());
+                        // 确保只提取第一行的列名（忽略筛选行）
+                        let headers = $('#data-table thead tr:first th:visible').map(function () {
+                            return $(this).text().trim();
+                        }).get();
+
 
                         // 将表头和数据合并
                         let dataArray = [headers].concat(rowData.map(row => row.slice(1))); // 跳过第一列
