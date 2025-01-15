@@ -327,7 +327,7 @@
                     }
 
                     if (window.location.pathname.includes("inquiry_form.html")) {
-                        exportWithTemplate(rowData, "商品报价比较视图_选中数据模板.xlsx");
+                        exportWithExcelJS(rowData, "商品报价比较视图_选中数据模板.xlsx");
                     } else {
                         exportNormalExcel(rowData, "商品报价比较视图_选中数据.xlsx");
                     }
@@ -340,7 +340,7 @@
                     let rowData = table.rows().data().toArray();
 
                     if (window.location.pathname.includes("inquiry_form.html")) {
-                        exportWithTemplate(rowData, "商品报价比较视图_全部数据模板.xlsx");
+                        exportWithExcelJS(rowData, "商品报价比较视图_全部数据模板.xlsx");
                     } else {
                         exportNormalExcel(rowData, "商品报价比较视图_全部数据.xlsx");
                     }
@@ -382,47 +382,48 @@
     });
 
     /**
-     * 导出模板格式
+     * 使用 ExcelJS 导出带样式的模板
      * @param {Array} rowData 表格数据
      * @param {String} filename 导出文件名
      */
-    function exportWithTemplate(rowData, filename) {
-        $.ajax({
-            url: excelTemplateUrl,
-            method: 'GET',
-            xhrFields: { responseType: 'arraybuffer' },
-            success: function (data) {
-                try {
-                    let workbook = XLSX.read(data, { type: 'array' });
-                    let sheet = workbook.Sheets[workbook.SheetNames[0]];
+    async function exportWithExcelJS(rowData, filename) {
+        const ExcelJS = await import('https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js');
 
-                    // 获取模板前五行
-                    let fixedRows = XLSX.utils.sheet_to_json(sheet, { header: 1 }).slice(0, 5);
+        fetch(excelTemplateUrl)
+            .then(response => response.arrayBuffer())
+            .then(async buffer => {
+                const workbook = new ExcelJS.Workbook();
+                await workbook.xlsx.load(buffer);
 
-                    // 处理选中数据
-                    let dataArray = rowData.map(row => row.slice(1)); // 跳过第一列（复选框列）
-                    let mergedData = fixedRows.concat(dataArray);
+                const sheet = workbook.getWorksheet(1);
 
-                    // 创建新的工作表
-                    let newSheet = XLSX.utils.aoa_to_sheet(mergedData);
-                    workbook.Sheets[workbook.SheetNames[0]] = newSheet;
-
-                    // 导出文件
-                    let wbout = XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });
-                    let blob = new Blob([s2ab(wbout)], { type: "application/octet-stream" });
-                    saveAs(blob, filename);
-                } catch (error) {
-                    console.error("模板处理失败:", error);
+                // 模板前五行样式保留
+                const fixedRows = [];
+                for (let i = 1; i <= 5; i++) {
+                    fixedRows.push(sheet.getRow(i).values);
                 }
-            },
-            error: function (err) {
-                console.error("获取模板失败:", err);
-            }
-        });
+
+                // 将选中数据插入到第六行
+                rowData.forEach((row, index) => {
+                    const dataRow = sheet.addRow(row.slice(1)); // 跳过第一列（复选框列）
+                    dataRow.eachCell((cell, colNumber) => {
+                        const templateCell = sheet.getRow(6).getCell(colNumber); // 参考第六行单元格样式
+                        if (templateCell) {
+                            cell.style = { ...templateCell.style }; // 复制样式
+                        }
+                    });
+                });
+
+                // 导出文件
+                const blob = await workbook.xlsx.writeBuffer();
+                const blobData = new Blob([blob], { type: "application/octet-stream" });
+                saveAs(blobData, filename);
+            })
+            .catch(error => console.error("模板加载失败:", error));
     }
 
     /**
-     * 导出普通 Excel
+     * 普通 Excel 导出
      * @param {Array} rowData 表格数据
      * @param {String} filename 导出文件名
      */
@@ -437,20 +438,6 @@
         let wbout = XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });
         let blob = new Blob([s2ab(wbout)], { type: "application/octet-stream" });
         saveAs(blob, filename);
-    }
-
-    /**
-     * 工具函数：字符串转 ArrayBuffer
-     * @param {String} s 二进制字符串
-     * @returns {ArrayBuffer} 转换后的 ArrayBuffer
-     */
-    function s2ab(s) {
-        let buf = new ArrayBuffer(s.length);
-        let view = new Uint8Array(buf);
-        for (let i = 0; i < s.length; i++) {
-            view[i] = s.charCodeAt(i) & 0xFF;
-        }
-        return buf;
     }
 });
 
