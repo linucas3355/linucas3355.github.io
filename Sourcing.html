@@ -60,15 +60,19 @@
         /* 按钮组 */
         .button-group {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            grid-template-columns: 1fr;
             gap: 20px;
             justify-items: center;
         }
 
         /* 按钮样式 */
         .button {
-            display: inline-block;
-            padding: 15px 20px;
+            display: inline-flex; /* 使用 flexbox */
+            align-items: center; /* 垂直居中 */
+            justify-content: center; /* 水平居中 */
+            width: 200px; /* 固定宽度 */
+            height: 60px; /* 固定高度 */
+            padding: 0; /* 清除内边距 */
             font-size: 1.1em;
             font-weight: 500;
             color: #fff;
@@ -99,12 +103,11 @@
         <h1>电商服务系统</h1>
         <p>请选择需要查看的表单：</p>
         <div class="button-group">
-            <a href="b_table.html" class="button"><i class="fas fa-table"></i>每日B表新增</a>
+            <a href="b_table.html" class="button"><i class="fas fa-table"></i>新增信息表</a>
             <a href="inquiry_form.html" class="button"><i class="fas fa-search"></i>询价单</a>
             <a href="quote_form.html" class="button"><i class="fas fa-file-invoice"></i>报价单</a>
-            <a href="recommend_form.html" class="button"><i class="fas fa-thumbs-up"></i>推荐单</a>
-            <a href="pending_listing.html" class="button"><i class="fas fa-list"></i>待上架表</a>
-            <a href="product_comparison.html" class="button"><i class="fas fa-chart-bar"></i>商品报价比较视图</a>
+            <a href="product_comparison.html" class="button"><i class="fas fa-chart-bar"></i>报价比较视图</a>
+            <a href="pending_listing.html" class="button"><i class="fas fa-list"></i>上架信息表</a>
         </div>
     </div>
 </body>

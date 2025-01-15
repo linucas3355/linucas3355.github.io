@@ -52,9 +52,13 @@
 
         /* 按钮样式 */
         .button {
-            display: inline-block;
-            padding: 15px 30px;
-            font-size: 1.2em;
+            display: inline-flex; /* 使用 flexbox */
+            align-items: center; /* 垂直居中 */
+            justify-content: center; /* 水平居中 */
+            width: 200px; /* 固定宽度 */
+            height: 60px; /* 固定高度 */
+            padding: 0; /* 清除内边距 */
+            font-size: 1.1em;
             font-weight: 500;
             color: #fff;
             background: linear-gradient(135deg, #6a8caf, #435a7e);
@@ -65,7 +69,7 @@
             transition: all 0.4s ease;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
             text-align: center;
-            margin: 10px; /* 添加间距 */
+            margin: 10px;
         }
 
         /* 悬停按钮样式 */
