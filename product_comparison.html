@@ -328,32 +328,23 @@
                             xhrFields: { responseType: 'arraybuffer' },
                             success: function (data) {
                                 try {
-                                    // 使用 XLSX 解析模板数据
                                     let workbook = XLSX.read(data, { type: 'array' });
                                     let sheet = workbook.Sheets[workbook.SheetNames[0]];
 
-                                    // 获取模板的前五行
                                     let fixedRows = XLSX.utils.sheet_to_json(sheet, { header: 1 }).slice(0, 5);
 
-                                    // 获取选中行数据
                                     let rowData = table.rows({ selected: true }).data().toArray();
                                     if (rowData.length === 0) {
                                         rowData = table.rows().data().toArray(); // 如果未选中任何行，则导出全部数据
                                     }
 
-                                    // 从第二列开始导出（跳过复选框列）
-                                    let dataArray = rowData.map(row => row.slice(1));
-
-                                    // 合并模板前五行和选中行数据
+                                    let dataArray = rowData.map(row => row.slice(1)); // 从第二列开始
                                     let mergedData = fixedRows.concat(dataArray);
 
-                                    // 创建新的工作表
                                     let newSheet = XLSX.utils.aoa_to_sheet(mergedData);
 
-                                    // 替换模板中的工作表
                                     workbook.Sheets[workbook.SheetNames[0]] = newSheet;
 
-                                    // 导出文件
                                     let wbout = XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });
                                     let blob = new Blob([s2ab(wbout)], { type: "application/octet-stream" });
                                     saveAs(blob, "询价单_导出模板.xlsx");
@@ -366,14 +357,18 @@
                             }
                         });
                     } else {
-                        // 非询价单页面，按照常规导出选中行
+                        // 非询价单页面，按常规方式导出选中行
                         let rowData = table.rows({ selected: true }).data().toArray();
                         if (rowData.length === 0) {
                             alert("请选择至少一行数据进行导出！");
                             return;
                         }
 
-                        let dataArray = rowData.map(row => row.slice(1)); // 从第二列开始导出
+                        // 添加表头（列名）
+                        let headers = table.columns(':visible').header().toArray().map(header => $(header).text());
+
+                        // 将表头和数据合并
+                        let dataArray = [headers].concat(rowData.map(row => row.slice(1))); // 跳过第一列
                         let newSheet = XLSX.utils.aoa_to_sheet(dataArray);
 
                         let workbook = XLSX.utils.book_new();
@@ -391,8 +386,8 @@
                 action: function () {
                     let rowData = table.rows().data().toArray();
 
-                    // 如果是询价单页面，则使用模板导出
                     if (window.location.pathname.includes("inquiry_form.html")) {
+                        // 询价单页面，使用模板导出
                         $.ajax({
                             url: excelTemplateUrl, // 模板的 URL
                             method: 'GET',
@@ -404,7 +399,7 @@
 
                                     let fixedRows = XLSX.utils.sheet_to_json(sheet, { header: 1 }).slice(0, 5);
 
-                                    let dataArray = rowData.map(row => row.slice(1)); // 从第二列开始导出
+                                    let dataArray = rowData.map(row => row.slice(1)); // 跳过第一列
                                     let mergedData = fixedRows.concat(dataArray);
 
                                     let newSheet = XLSX.utils.aoa_to_sheet(mergedData);
@@ -423,8 +418,11 @@
                             }
                         });
                     } else {
-                        // 非询价单页面，按照常规导出所有数据
-                        let dataArray = rowData.map(row => row.slice(1)); // 从第二列开始导出
+                        // 非询价单页面，按常规方式导出所有数据
+                        let headers = table.columns(':visible').header().toArray().map(header => $(header).text());
+
+                        // 将表头和数据合并
+                        let dataArray = [headers].concat(rowData.map(row => row.slice(1))); // 跳过第一列
                         let newSheet = XLSX.utils.aoa_to_sheet(dataArray);
 
                         let workbook = XLSX.utils.book_new();
