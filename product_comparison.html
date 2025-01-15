@@ -320,72 +320,16 @@
                 text: '导出选中行 (Excel)',
                 className: 'btn btn-primary',
                 action: function () {
+                    let rowData = table.rows({ selected: true }).data().toArray();
+                    if (rowData.length === 0) {
+                        alert("请选择至少一行数据进行导出！");
+                        return;
+                    }
+
                     if (window.location.pathname.includes("inquiry_form.html")) {
-                        // 询价单页面，使用模板导出
-                        $.ajax({
-                            url: excelTemplateUrl, // 模板的 URL
-                            method: 'GET',
-                            xhrFields: { responseType: 'arraybuffer' },
-                            success: function (data) {
-                                try {
-                                    let workbook = XLSX.read(data, { type: 'array' });
-                                    let sheet = workbook.Sheets[workbook.SheetNames[0]];
-
-                                    let fixedRows = XLSX.utils.sheet_to_json(sheet, { header: 1 }).slice(0, 5);
-
-                                    let rowData = table.rows({ selected: true }).data().toArray();
-                                    if (rowData.length === 0) {
-                                        rowData = table.rows().data().toArray(); // 如果未选中任何行，则导出全部数据
-                                    }
-
-                                    let dataArray = rowData.map(row => row.slice(1)); // 从第二列开始
-                                    let mergedData = fixedRows.concat(dataArray);
-
-                                    let newSheet = XLSX.utils.aoa_to_sheet(mergedData);
-
-                                    workbook.Sheets[workbook.SheetNames[0]] = newSheet;
-
-                                    let wbout = XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });
-                                    let blob = new Blob([s2ab(wbout)], { type: "application/octet-stream" });
-                                    saveAs(blob, "询价单_导出模板.xlsx");
-                                } catch (error) {
-                                    console.error("模板处理失败:", error);
-                                }
-                            },
-                            error: function (err) {
-                                console.log('获取模板失败', err);
-                            }
-                        });
+                        exportWithTemplate(rowData, "商品报价比较视图_选中数据模板.xlsx");
                     } else {
-                        // 非询价单页面，按常规方式导出选中行
-                        let rowData = table.rows({ selected: true }).data().toArray();
-                        if (rowData.length === 0) {
-                            alert("请选择至少一行数据进行导出！");
-                            return;
-                        }
-
-                        // 添加表头（列名）
-                        // 确保只提取第一行的列名（忽略筛选行）
-                        let headers = $('#data-table thead tr:first th:visible').map(function (index) {
-                            if (index > 0) { // 跳过第一列
-                                return $(this).text().trim();
-                            }
-                        }).get();
-
-                        // 动态文件名（根据 title）
-                        let filename = "商品报价比较视图_导出数据.xlsx";
-
-
-                        // 将表头和数据合并
-                        let dataArray = [headers].concat(rowData.map(row => row.slice(1))); // 跳过第一列
-                        let newSheet = XLSX.utils.aoa_to_sheet(dataArray);
-
-                        let workbook = XLSX.utils.book_new();
-                        XLSX.utils.book_append_sheet(workbook, newSheet, "选中数据");
-
-                        let wbout = XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });
-                        let blob = new Blob([s2ab(wbout)], { type: "application/octet-stream" });
-                        saveAs(blob, "选中行数据.xlsx");
+                        exportNormalExcel(rowData, "商品报价比较视图_选中数据.xlsx");
                     }
                 }
             },
@@ -396,60 +340,19 @@
                     let rowData = table.rows().data().toArray();
 
                     if (window.location.pathname.includes("inquiry_form.html")) {
-                        // 询价单页面，使用模板导出
-                        $.ajax({
-                            url: excelTemplateUrl, // 模板的 URL
-                            method: 'GET',
-                            xhrFields: { responseType: 'arraybuffer' },
-                            success: function (data) {
-                                try {
-                                    let workbook = XLSX.read(data, { type: 'array' });
-                                    let sheet = workbook.Sheets[workbook.SheetNames[0]];
-
-                                    let fixedRows = XLSX.utils.sheet_to_json(sheet, { header: 1 }).slice(0, 5);
-
-                                    let dataArray = rowData.map(row => row.slice(1)); // 跳过第一列
-                                    let mergedData = fixedRows.concat(dataArray);
-
-                                    let newSheet = XLSX.utils.aoa_to_sheet(mergedData);
-
-                                    workbook.Sheets[workbook.SheetNames[0]] = newSheet;
-
-                                    let wbout = XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });
-                                    let blob = new Blob([s2ab(wbout)], { type: "application/octet-stream" });
-                                    saveAs(blob, "询价单_全部数据模板.xlsx");
-                                } catch (error) {
-                                    console.error("模板处理失败:", error);
-                                }
-                            },
-                            error: function (err) {
-                                console.error('获取模板失败:', err);
-                            }
-                        });
+                        exportWithTemplate(rowData, "商品报价比较视图_全部数据模板.xlsx");
                     } else {
-                        // 非询价单页面，按常规方式导出所有数据
-                        let headers = table.columns(':visible').header().toArray().map(header => $(header).text());
-
-                        // 将表头和数据合并
-                        let dataArray = [headers].concat(rowData.map(row => row.slice(1))); // 跳过第一列
-                        let newSheet = XLSX.utils.aoa_to_sheet(dataArray);
-
-                        let workbook = XLSX.utils.book_new();
-                        XLSX.utils.book_append_sheet(workbook, newSheet, "全部数据");
-
-                        let wbout = XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });
-                        let blob = new Blob([s2ab(wbout)], { type: "application/octet-stream" });
-                        saveAs(blob, "全部数据.xlsx");
+                        exportNormalExcel(rowData, "商品报价比较视图_全部数据.xlsx");
                     }
                 }
             }
         ],
-        colReorder: true, // 启用列宽拖动功能
-        paging: true, // 启用分页
-        searching: true, // 启用搜索
-        info: true, // 显示表格信息
-        ordering: false, // 禁用默认排序
-        language: { // 本地化文本
+        colReorder: true,
+        paging: true,
+        searching: true,
+        info: true,
+        ordering: false,
+        language: {
             search: "搜索：",
             lengthMenu: "每页显示 _MENU_ 条记录",
             info: "显示 _START_ 到 _END_ 条，共 _TOTAL_ 条记录",
@@ -477,17 +380,79 @@
             }
         });
     });
-});
 
-// 字符串转为二进制数据
-function s2ab(s) {
-    var buf = new ArrayBuffer(s.length);
-    var view = new Uint8Array(buf);
-    for (var i = 0; i < s.length; i++) {
-        view[i] = s.charCodeAt(i) & 0xFF;
+    /**
+     * 导出模板格式
+     * @param {Array} rowData 表格数据
+     * @param {String} filename 导出文件名
+     */
+    function exportWithTemplate(rowData, filename) {
+        $.ajax({
+            url: excelTemplateUrl,
+            method: 'GET',
+            xhrFields: { responseType: 'arraybuffer' },
+            success: function (data) {
+                try {
+                    let workbook = XLSX.read(data, { type: 'array' });
+                    let sheet = workbook.Sheets[workbook.SheetNames[0]];
+
+                    // 获取模板前五行
+                    let fixedRows = XLSX.utils.sheet_to_json(sheet, { header: 1 }).slice(0, 5);
+
+                    // 处理选中数据
+                    let dataArray = rowData.map(row => row.slice(1)); // 跳过第一列（复选框列）
+                    let mergedData = fixedRows.concat(dataArray);
+
+                    // 创建新的工作表
+                    let newSheet = XLSX.utils.aoa_to_sheet(mergedData);
+                    workbook.Sheets[workbook.SheetNames[0]] = newSheet;
+
+                    // 导出文件
+                    let wbout = XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });
+                    let blob = new Blob([s2ab(wbout)], { type: "application/octet-stream" });
+                    saveAs(blob, filename);
+                } catch (error) {
+                    console.error("模板处理失败:", error);
+                }
+            },
+            error: function (err) {
+                console.error("获取模板失败:", err);
+            }
+        });
     }
-    return buf;
-}
+
+    /**
+     * 导出普通 Excel
+     * @param {Array} rowData 表格数据
+     * @param {String} filename 导出文件名
+     */
+    function exportNormalExcel(rowData, filename) {
+        let headers = table.columns(':visible').header().toArray().map(header => $(header).text().trim());
+        let dataArray = [headers].concat(rowData.map(row => row.slice(1))); // 跳过第一列（复选框列）
+
+        let newSheet = XLSX.utils.aoa_to_sheet(dataArray);
+        let workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, newSheet, "数据");
+
+        let wbout = XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });
+        let blob = new Blob([s2ab(wbout)], { type: "application/octet-stream" });
+        saveAs(blob, filename);
+    }
+
+    /**
+     * 工具函数：字符串转 ArrayBuffer
+     * @param {String} s 二进制字符串
+     * @returns {ArrayBuffer} 转换后的 ArrayBuffer
+     */
+    function s2ab(s) {
+        let buf = new ArrayBuffer(s.length);
+        let view = new Uint8Array(buf);
+        for (let i = 0; i < s.length; i++) {
+            view[i] = s.charCodeAt(i) & 0xFF;
+        }
+        return buf;
+    }
+});
 
     </script>
 </body>
