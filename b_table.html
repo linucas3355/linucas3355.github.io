@@ -241,9 +241,12 @@
 
                         // 添加表头（列名）
                         // 确保只提取第一行的列名（忽略筛选行）
-                        let headers = $('#data-table thead tr:first th:visible').map(function () {
-                            return $(this).text().trim();
+                        let headers = $('#data-table thead tr:first th:visible').map(function (index) {
+                            if (index > 0) { // 跳过第一列
+                                return $(this).text().trim();
+                            }
                         }).get();
+
 
 
                         // 将表头和数据合并
